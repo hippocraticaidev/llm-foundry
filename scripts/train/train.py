@@ -142,6 +142,7 @@ def main(cfg):
 
     # build tokenizer
     tokenizer = build_tokenizer(cfg.tokenizer)
+    tokenizer.pad_token_id = 0
 
     # Build Model
     print('Initializing model...')
