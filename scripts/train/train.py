@@ -10,6 +10,7 @@ from composer import Trainer
 from composer.core import Evaluator
 from composer.utils import dist, get_device, reproducibility
 from omegaconf import OmegaConf as om
+from composer.loggers import WandBLogger
 
 from llmfoundry import (COMPOSER_MODEL_REGISTRY, build_finetuning_dataloader,
                         build_text_denoising_dataloader)
@@ -200,6 +201,8 @@ def main(cfg):
 
     # Build the Trainer
     print('Building trainer...')
+    wandb_logger = WandBLogger(init_params=cfg)
+
     trainer = Trainer(
         run_name=cfg.run_name,
         seed=cfg.seed,
@@ -214,7 +217,7 @@ def main(cfg):
         progress_bar=cfg.get('progress_bar', False),
         log_to_console=cfg.get('log_to_console', True),
         console_log_interval=cfg.get('console_log_interval', '1ba'),
-        loggers=loggers,
+        loggers=wandb_logger,
         callbacks=callbacks,
         precision=cfg.precision,
         algorithms=algorithms,
